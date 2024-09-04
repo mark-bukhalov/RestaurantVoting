@@ -2,6 +2,7 @@ package ru.javaops.topjava2.web.restaurant;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = RestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController {
-    public static final String REST_URL = "api/restaurant";
+    public static final String REST_URL = "/api/restaurant";
 
     private final RestaurantService service;
 
@@ -32,6 +33,7 @@ public class RestaurantController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer id) {
         service.delete(id);
     }
@@ -47,7 +49,7 @@ public class RestaurantController {
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody CreateRestaurantTo restaurantTo, @PathVariable Integer id) {
         service.update(restaurantTo, id);
     }
