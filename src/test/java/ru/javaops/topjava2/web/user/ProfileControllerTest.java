@@ -8,7 +8,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javaops.topjava2.model.User;
 import ru.javaops.topjava2.repository.UserRepository;
-import ru.javaops.topjava2.to.UserTo;
+import ru.javaops.topjava2.to.user.UserTo;
 import ru.javaops.topjava2.util.JsonUtil;
 import ru.javaops.topjava2.util.UsersUtil;
 import ru.javaops.topjava2.web.AbstractControllerTest;

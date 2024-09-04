@@ -3,7 +3,7 @@ package ru.javaops.topjava2.util;
 import lombok.experimental.UtilityClass;
 import ru.javaops.topjava2.model.Role;
 import ru.javaops.topjava2.model.User;
-import ru.javaops.topjava2.to.UserTo;
+import ru.javaops.topjava2.to.user.UserTo;
 
 @UtilityClass
 public class UsersUtil {

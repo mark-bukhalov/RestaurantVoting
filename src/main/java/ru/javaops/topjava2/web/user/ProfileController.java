@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaops.topjava2.model.User;
-import ru.javaops.topjava2.to.UserTo;
+import ru.javaops.topjava2.to.user.UserTo;
 import ru.javaops.topjava2.util.UsersUtil;
 import ru.javaops.topjava2.web.AuthUser;
 
