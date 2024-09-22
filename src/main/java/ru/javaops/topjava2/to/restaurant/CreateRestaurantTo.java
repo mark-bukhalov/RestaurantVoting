@@ -1,8 +1,10 @@
 package ru.javaops.topjava2.to.restaurant;
 
+import lombok.ToString;
 import ru.javaops.topjava2.model.Restaurant;
 import ru.javaops.topjava2.to.NamedTo;
 
+@ToString(callSuper = true)
 public class CreateRestaurantTo extends NamedTo {
     public CreateRestaurantTo(Integer id, String name) {
         super(id, name);
