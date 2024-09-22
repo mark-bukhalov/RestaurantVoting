@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = RestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController {
-    public static final String REST_URL = "/api/restaurant";
+    public static final String REST_URL = "/api/admin/restaurant";
 
     private final RestaurantService service;
 

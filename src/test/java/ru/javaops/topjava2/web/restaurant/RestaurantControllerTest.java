@@ -41,6 +41,14 @@ class RestaurantControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getAllUnauthorized() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+    }
+
+
+    @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL_SLASH + RESTAURANT_TO_1_ID))
@@ -51,14 +59,29 @@ class RestaurantControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithUserDetails(value = USER_MAIL)
+    void getByUser() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + RESTAURANT_TO_1_ID))
+                .andExpect(status().isForbidden())
+                .andDo(print());
+    }
+
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void getNotExist() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + RESTAURANT_TO_NOT_EXIST_ID))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL_SLASH + RESTAURANT_TO_1_ID))
                 .andExpect(status().isNoContent())
                 .andDo(print());
         assertFalse(repository.findById(RESTAURANT_TO_1_ID).isPresent());
-
-
     }
 
     @Test
@@ -79,6 +102,17 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
+    void createUnprocessable() throws Exception {
+        CreateRestaurantTo createRestaurantTo = RestaurantTestData.getNew();
+        createRestaurantTo.setName("q");
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(createRestaurantTo)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
     void update() throws Exception {
         CreateRestaurantTo updateRestaurantTo = RestaurantTestData.getUpdated();
         perform(MockMvcRequestBuilders.put(REST_URL_SLASH + RESTAURANT_TO_1_ID)
@@ -90,4 +124,16 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
         RESTAURANT_TO_MATCHER.assertMatch(service.get(updateRestaurantTo.getId()), expected);
     }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void updateUnprocessable() throws Exception {
+        CreateRestaurantTo updateRestaurantTo = RestaurantTestData.getUpdated();
+        updateRestaurantTo.setName("q");
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + RESTAURANT_TO_1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updateRestaurantTo)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
 }
