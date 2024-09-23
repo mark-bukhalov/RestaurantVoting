@@ -17,8 +17,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Restaurant extends NamedEntity {
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Dish> menu;
 
