@@ -37,7 +37,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_TO_MATCHER.contentJson(RestaurantToList));
+                .andExpect(RESTAURANT_TO_MATCHER.contentJson(RESTAURANT_TO_LIST));
     }
 
     @Test
@@ -135,5 +135,4 @@ class RestaurantControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updateRestaurantTo)))
                 .andExpect(status().isUnprocessableEntity());
     }
-
 }

@@ -1,6 +1,9 @@
 package ru.javaops.topjava2.to.dish;
 
+import jakarta.validation.constraints.NotNull;
+
 import lombok.Getter;
+import org.hibernate.validator.constraints.Range;
 import ru.javaops.topjava2.model.Dish;
 import ru.javaops.topjava2.to.NamedTo;
 
@@ -11,8 +14,14 @@ import java.util.List;
 @Getter
 public class DishTo extends NamedTo {
 
+    @NotNull
+    @Range(min = 1, max = 5000)
     private final BigDecimal price;
+
+    @NotNull
     private final Date date;
+
+    @NotNull
     private final Integer restaurantId;
 
     public DishTo(Integer id, String name, BigDecimal price, Date date, Integer restaurantId) {

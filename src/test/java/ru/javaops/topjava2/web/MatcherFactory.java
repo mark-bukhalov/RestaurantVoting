@@ -1,15 +1,19 @@
 package ru.javaops.topjava2.web;
 
+import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
+import org.assertj.core.util.BigDecimalComparator;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 import ru.javaops.topjava2.util.JsonUtil;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.BiConsumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration.builder;
 
 /**
  * Factory for creating test matchers.
@@ -30,9 +34,15 @@ public class MatcherFactory {
     }
 
     public static <T> Matcher<T> usingIgnoringFieldsComparator(Class<T> clazz, String... fieldsToIgnore) {
+        //https://github.com/assertj/assertj/issues/1876
+        RecursiveComparisonConfiguration configuration = builder()
+                .withIgnoredFields(fieldsToIgnore)
+                .withComparatorForType(BigDecimalComparator.BIG_DECIMAL_COMPARATOR, BigDecimal.class)
+                .build();
+
         return usingAssertions(clazz,
-                (a, e) -> assertThat(a).usingRecursiveComparison().ignoringFields(fieldsToIgnore).isEqualTo(e),
-                (a, e) -> assertThat(a).usingRecursiveFieldByFieldElementComparatorIgnoringFields(fieldsToIgnore).isEqualTo(e));
+                (a, e) -> assertThat(a).usingRecursiveComparison(configuration).isEqualTo(e),
+                (a, e) -> assertThat(a).usingRecursiveFieldByFieldElementComparator(configuration).isEqualTo(e));
     }
 
     public static class Matcher<T> {
