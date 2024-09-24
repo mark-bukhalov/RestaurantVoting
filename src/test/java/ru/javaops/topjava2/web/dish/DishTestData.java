@@ -18,6 +18,7 @@ public class DishTestData {
     public static final int DISH_TO_ID_6 = 6;
     public static final int DISH_TO_ID_7 = 7;
     public static final int DISH_TO_ID_8 = 8;
+    public static final int DISH_TO_ID_NOT_EXIST = 100;
 
     public static final DishTo DISH_TO_1 = new DishTo(DISH_TO_ID_1, "Ratatouille", BigDecimal.valueOf(100.00), stringToDate("2024-09-02"), 1);
     public static final DishTo DISH_TO_2 = new DishTo(DISH_TO_ID_2, "Spaghetti", BigDecimal.valueOf(120.5), stringToDate("2024-09-02"), 1);

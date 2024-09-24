@@ -3,6 +3,7 @@ package ru.javaops.topjava2.to.dish;
 import jakarta.validation.constraints.NotNull;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 import ru.javaops.topjava2.model.Dish;
 import ru.javaops.topjava2.to.NamedTo;
@@ -11,18 +12,19 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+@Setter
 @Getter
 public class DishTo extends NamedTo {
 
     @NotNull
     @Range(min = 1, max = 5000)
-    private final BigDecimal price;
+    private BigDecimal price;
 
     @NotNull
-    private final Date date;
+    private Date date;
 
     @NotNull
-    private final Integer restaurantId;
+    private Integer restaurantId;
 
     public DishTo(Integer id, String name, BigDecimal price, Date date, Integer restaurantId) {
         super(id, name);

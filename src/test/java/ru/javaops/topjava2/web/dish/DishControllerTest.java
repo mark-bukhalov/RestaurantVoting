@@ -9,8 +9,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javaops.topjava2.repository.DishRepository;
 import ru.javaops.topjava2.service.DishService;
 import ru.javaops.topjava2.to.dish.DishTo;
+
 import ru.javaops.topjava2.util.JsonUtil;
 import ru.javaops.topjava2.web.AbstractControllerTest;
+import ru.javaops.topjava2.web.restaurant.RestaurantController;
+
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -19,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.javaops.topjava2.web.dish.DishController.REST_URL;
 import static ru.javaops.topjava2.web.dish.DishTestData.*;
 import static ru.javaops.topjava2.web.user.UserTestData.ADMIN_MAIL;
+import static ru.javaops.topjava2.web.user.UserTestData.USER_MAIL;
 
 class DishControllerTest extends AbstractControllerTest {
     private static final String REST_URL_SLASH = REST_URL + '/';
@@ -40,6 +45,13 @@ class DishControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getAllUnauthorized() throws Exception {
+        perform(MockMvcRequestBuilders.get(RestaurantController.REST_URL))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+    }
+
+    @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL_SLASH + DISH_TO_ID_1))
@@ -47,6 +59,22 @@ class DishControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(DISH_TO_MATCHER.contentJson(DISH_TO_1));
+    }
+
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void getByUser() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + DISH_TO_ID_1))
+                .andExpect(status().isForbidden())
+                .andDo(print());
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void getNotExist() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + DISH_TO_ID_NOT_EXIST))
+                .andExpect(status().isNotFound())
+                .andDo(print());
     }
 
     @Test
@@ -76,6 +104,17 @@ class DishControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
+    void createUnprocessable() throws Exception {
+        DishTo newDish = DishTestData.getNew();
+        newDish.setPrice(BigDecimal.valueOf(0));
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newDish)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
     void update() throws Exception {
         DishTo updateDish = DishTestData.getUpdated();
         perform(MockMvcRequestBuilders.put(REST_URL_SLASH + DISH_TO_ID_1)
@@ -86,5 +125,16 @@ class DishControllerTest extends AbstractControllerTest {
         DishTo expectedDish = new DishTo(updateDish.getId(), updateDish.getName(), updateDish.getPrice(), updateDish.getDate(), updateDish.getRestaurantId());
 
         DISH_TO_MATCHER.assertMatch(dishService.get(updateDish.getId()), expectedDish);
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void updateUnprocessable() throws Exception {
+        DishTo updateDish = DishTestData.getUpdated();
+        updateDish.setName("q");
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + DISH_TO_ID_1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updateDish)))
+                .andExpect(status().isUnprocessableEntity());
     }
 }
