@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 
 @Entity
@@ -19,10 +19,10 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Vote extends BaseEntity {
 
-    @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()")
-    private Date date;
+    @Column(name = "date", nullable = false, columnDefinition = "DATE DEFAULT CURRENT_DATE")
+    private LocalDate date = LocalDate.now();
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 

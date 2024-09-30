@@ -7,7 +7,7 @@ import ru.javaops.topjava2.model.Restaurant;
 import ru.javaops.topjava2.repository.projection.RestaurantIdVoteCount;
 import ru.javaops.topjava2.repository.projection.RestaurantWithMenu;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -18,7 +18,7 @@ public interface RestaurantRepository extends BaseRepository<Restaurant> {
                    LEFT JOIN r.menu as m
                    on m.date = :onDate
             """)
-    List<RestaurantWithMenu> findAllWithMenuOnDate(@Param("onDate") Date onDate);
+    List<RestaurantWithMenu> findAllWithMenuOnDate(@Param("onDate") LocalDate onDate);
 
     @Query("""
             SELECT r.id AS id,
@@ -28,7 +28,7 @@ public interface RestaurantRepository extends BaseRepository<Restaurant> {
                          AND v.date = :onDate
           GROUP BY r.id
          """)
-    List<RestaurantIdVoteCount> countRestaurantVoteOnDate(@Param("onDate") Date onDate);
+    List<RestaurantIdVoteCount> countRestaurantVoteOnDate(@Param("onDate") LocalDate onDate);
 
 
 }

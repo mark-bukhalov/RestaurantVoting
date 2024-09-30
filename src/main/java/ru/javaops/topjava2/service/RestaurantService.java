@@ -9,9 +9,9 @@ import ru.javaops.topjava2.repository.projection.ProjectionConverter;
 import ru.javaops.topjava2.to.restaurant.CreateRestaurantTo;
 import ru.javaops.topjava2.to.restaurant.RestaurantTo;
 import ru.javaops.topjava2.to.restaurant.UserViewRestaurantTo;
-import ru.javaops.topjava2.util.DateTimeUtil;
 import ru.javaops.topjava2.util.validation.ValidationUtil;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -48,7 +48,7 @@ public class RestaurantService {
     @Transactional
     public List<UserViewRestaurantTo> getAllUserView() {
         return ProjectionConverter.mergeRestaurantWithMenuAndVote(
-                repository.findAllWithMenuOnDate(DateTimeUtil.getStartDate()),
-                repository.countRestaurantVoteOnDate(DateTimeUtil.getStartDate()));
+                repository.findAllWithMenuOnDate(LocalDate.now()),
+                repository.countRestaurantVoteOnDate(LocalDate.now()));
     }
 }

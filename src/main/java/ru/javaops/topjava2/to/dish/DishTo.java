@@ -9,7 +9,7 @@ import ru.javaops.topjava2.model.Dish;
 import ru.javaops.topjava2.to.NamedTo;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Setter
@@ -21,12 +21,12 @@ public class DishTo extends NamedTo {
     private BigDecimal price;
 
     @NotNull
-    private Date date;
+    private LocalDate date;
 
     @NotNull
     private Integer restaurantId;
 
-    public DishTo(Integer id, String name, BigDecimal price, Date date, Integer restaurantId) {
+    public DishTo(Integer id, String name, BigDecimal price, LocalDate date, Integer restaurantId) {
         super(id, name);
         this.price = price;
         this.date = date;

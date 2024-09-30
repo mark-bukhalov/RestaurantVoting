@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "dish")
@@ -16,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Dish extends NamedEntity {
 
-    public Dish(Integer id, String name, BigDecimal price, Date date, Restaurant restaurant) {
+    public Dish(Integer id, String name, BigDecimal price, LocalDate date, Restaurant restaurant) {
         super(id, name);
         this.price = price;
         this.date = date;
@@ -26,8 +26,8 @@ public class Dish extends NamedEntity {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    @Column(name = "date", nullable = false)
-    private Date date;
+    @Column(name = "date", nullable = false, columnDefinition = "DATE DEFAULT CURRENT_DATE")
+    private LocalDate date = LocalDate.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Restaurant restaurant;
