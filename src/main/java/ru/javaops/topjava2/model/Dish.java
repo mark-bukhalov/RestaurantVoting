@@ -26,7 +26,7 @@ public class Dish extends NamedEntity {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()")
+    @Column(name = "date", nullable = false)
     private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)

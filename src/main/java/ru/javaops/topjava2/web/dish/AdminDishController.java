@@ -17,8 +17,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RestController
-@RequestMapping(value = DishController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class DishController {
+@RequestMapping(value = AdminDishController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+public class AdminDishController {
     public static final String REST_URL = "/api/admin/dish";
 
     private final DishService service;

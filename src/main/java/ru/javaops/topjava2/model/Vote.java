@@ -22,7 +22,7 @@ public class Vote extends BaseEntity {
     @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()")
     private Date date;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 

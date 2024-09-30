@@ -5,8 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javaops.topjava2.model.Restaurant;
 import ru.javaops.topjava2.repository.RestaurantRepository;
+import ru.javaops.topjava2.repository.projection.ProjectionConverter;
 import ru.javaops.topjava2.to.restaurant.CreateRestaurantTo;
 import ru.javaops.topjava2.to.restaurant.RestaurantTo;
+import ru.javaops.topjava2.to.restaurant.UserViewRestaurantTo;
+import ru.javaops.topjava2.util.DateTimeUtil;
 import ru.javaops.topjava2.util.validation.ValidationUtil;
 
 import java.util.List;
@@ -40,5 +43,12 @@ public class RestaurantService {
         ValidationUtil.assureIdConsistent(createRestaurantTo, id);
         Restaurant restaurant = repository.getExisted(id);
         repository.save(CreateRestaurantTo.updateFromTo(restaurant, createRestaurantTo));
+    }
+
+    @Transactional
+    public List<UserViewRestaurantTo> getAllUserView() {
+        return ProjectionConverter.mergeRestaurantWithMenuAndVote(
+                repository.findAllWithMenuOnDate(DateTimeUtil.getStartDate()),
+                repository.countRestaurantVoteOnDate(DateTimeUtil.getStartDate()));
     }
 }
