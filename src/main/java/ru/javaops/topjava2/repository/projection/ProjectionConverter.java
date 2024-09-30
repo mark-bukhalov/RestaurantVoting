@@ -8,23 +8,6 @@ import java.util.stream.Collectors;
 
 @UtilityClass
 public class ProjectionConverter {
-    public static UserViewRestaurantTo toUserViewRestaurantTo(RestaurantWithMenu projection) {
-        if (projection.getDish() == null) {
-            return new UserViewRestaurantTo(projection.getId(),
-                    projection.getName(),
-                    null);
-        } else {
-            return new UserViewRestaurantTo(projection.getId(),
-                    projection.getName(),
-                    new ArrayList<>(
-                            Collections.singleton(new UserViewRestaurantTo.UserViewDish(projection.getDish().getId(),
-                                    projection.getDish().getName(),
-                                    projection.getDish().getPrice()))
-                    ));
-        }
-
-    }
-
     public static List<UserViewRestaurantTo> toUserViewRestaurantTo(List<RestaurantWithMenu> projection) {
         Map<Integer, UserViewRestaurantTo> idRestMap = new HashMap<>();
 

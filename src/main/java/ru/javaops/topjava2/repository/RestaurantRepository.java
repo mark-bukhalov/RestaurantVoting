@@ -27,7 +27,7 @@ public interface RestaurantRepository extends BaseRepository<Restaurant> {
          LEFT JOIN Vote v ON r.id = v.restaurant.id
                          AND v.date = :onDate
           GROUP BY r.id
-          """)
+         """)
     List<RestaurantIdVoteCount> countRestaurantVoteOnDate(@Param("onDate") Date onDate);
 
 
