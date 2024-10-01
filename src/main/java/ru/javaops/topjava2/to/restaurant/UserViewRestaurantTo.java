@@ -8,17 +8,22 @@ import java.util.List;
 
 @Setter
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class UserViewRestaurantTo {
     Integer id;
     String name;
     Integer voteCount;
     List<UserViewDish> menu;
 
-    public UserViewRestaurantTo(Integer id, String name, List<UserViewDish> menu) {
+    public UserViewRestaurantTo(Integer id, String name, List<UserViewDish> menu, Integer voteCount) {
         this.id = id;
         this.name = name;
         this.menu = menu;
+        this.voteCount = voteCount;
+    }
+
+    public UserViewRestaurantTo(Integer id, String name, List<UserViewDish> menu) {
+        this(id, name, menu, 0);
     }
 
     public UserViewRestaurantTo(Integer id, String name) {

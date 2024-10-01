@@ -94,7 +94,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(status().isCreated());
 
         RestaurantTo created = RESTAURANT_TO_MATCHER.readFromJson(resultActions);
-        RestaurantTo expected = new RestaurantTo(4, createRestaurantTo.getName());
+        RestaurantTo expected = new RestaurantTo(5, createRestaurantTo.getName());
 
         RESTAURANT_TO_MATCHER.assertMatch(created, expected);
         RESTAURANT_TO_MATCHER.assertMatch(service.get(created.getId()), expected);

@@ -11,7 +11,8 @@ VALUES ('USER', 1),
 INSERT INTO RESTAURANT(NAME)
 VALUES ('Gusteaus'),
        ('Los Pollos Hermanos'),
-       ('Double R Diner');
+       ('Double R Diner'),
+       ('Burger King');
 
 INSERT INTO DISH (NAME, DATE, PRICE, RESTAURANT_ID)
 VALUES ('Ratatouille', current_date, 100, 1),

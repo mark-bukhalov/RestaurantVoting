@@ -13,7 +13,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "vote",
-        indexes = {@Index(name = "vote_unique_date_restarauntid_userid_idx", columnList = "date, user_id")})
+        indexes = {@Index(name = "vote_unique_date_restaurantid_userid_idx", columnList = "date, user_id")})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
