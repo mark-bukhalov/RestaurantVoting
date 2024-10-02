@@ -28,5 +28,4 @@ INSERT INTO VOTE (DATE, RESTAURANT_ID, USER_ID)
 VALUES (current_date, 1, 1),
        (current_date, 1, 2),
        (current_date - 1, 2, 1),
-       (current_date, 3, 3),
        (current_date + 1, 3, 3);

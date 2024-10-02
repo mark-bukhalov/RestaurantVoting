@@ -26,14 +26,14 @@ public class UserRestaurantTestData {
             List.of(new UserViewRestaurantTo.UserViewDish(DISH_TO_4.getId(), DISH_TO_4.getName(), DISH_TO_4.getPrice()),
                     new UserViewRestaurantTo.UserViewDish(DISH_TO_5.getId(), DISH_TO_5.getName(), DISH_TO_5.getPrice())
             ),
-            1
+            0
     );
 
     public static final UserViewRestaurantTo USER_VIEW_RESTAURANT_TO_3 = new UserViewRestaurantTo(
             RESTAURANT_TO_3.getId(), RESTAURANT_TO_3.getName(),
             List.of(new UserViewRestaurantTo.UserViewDish(DISH_TO_7.getId(), DISH_TO_7.getName(), DISH_TO_7.getPrice())
             ),
-            1
+            0
     );
 
     public static final UserViewRestaurantTo USER_VIEW_RESTAURANT_TO_4 = new UserViewRestaurantTo(
