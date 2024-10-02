@@ -11,6 +11,7 @@ import ru.javaops.topjava2.repository.UserRepository;
 import ru.javaops.topjava2.repository.VoteRepository;
 import ru.javaops.topjava2.repository.projection.vote.VoteRestaurantId;
 import ru.javaops.topjava2.to.vote.VoteTo;
+import ru.javaops.topjava2.util.CurrentDateTime;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -50,8 +51,8 @@ public class VoteService {
     }
 
     private void checkTimeChange() {
-        if (LocalTime.of(11, 0).isBefore(LocalTime.now())){
-            throw new  DataIntegrityViolationException("The user can change his vote only until 11:00");
+        if (LocalTime.of(11, 0).isBefore(CurrentDateTime.getCurrentTime())) {
+            throw new DataIntegrityViolationException("The user can change his vote only until 11:00");
         }
     }
 }

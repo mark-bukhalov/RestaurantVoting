@@ -1,18 +1,24 @@
 package ru.javaops.topjava2.web.vote;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javaops.topjava2.repository.VoteRepository;
 import ru.javaops.topjava2.to.vote.VoteTo;
+import ru.javaops.topjava2.util.CurrentDateTime;
 import ru.javaops.topjava2.web.AbstractControllerTest;
+
+import java.time.LocalTime;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javaops.topjava2.web.restaurant.RestaurantTestData.RESTAURANT_TO_1_ID;
+import static ru.javaops.topjava2.web.restaurant.RestaurantTestData.RESTAURANT_TO_3_ID;
 import static ru.javaops.topjava2.web.user.UserTestData.*;
 import static ru.javaops.topjava2.web.vote.UserVoteController.REST_URL;
 import static ru.javaops.topjava2.web.vote.VoteTestData.USER_VOTE_TO;
@@ -52,16 +58,38 @@ class UserVoteControllerTest extends AbstractControllerTest {
                 .andExpect(VOTE_TO_MATCHER.contentJson(new VoteTo(RESTAURANT_TO_1_ID)));
     }
 
-//TODO: Mock LocalTime.now();
 
-//    @Test
-//    @WithUserDetails(value = ADMIN_MAIL)
-//    void UpdateAdminVote() throws Exception {
-//        perform(MockMvcRequestBuilders.post(REST_URL)
-//                .param("restaurantId", String.valueOf(RESTAURANT_TO_3_ID)))
-//                .andExpect(status().isOk())
-//                .andDo(print())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(VOTE_TO_MATCHER.contentJson(new VoteTo(RESTAURANT_TO_3_ID)));
-//    }
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void UpdateAdminVoteBeforeCheckTime() throws Exception {
+
+        LocalTime lc = LocalTime.of(11, 00, 00);
+
+        try (MockedStatic<CurrentDateTime> localTimeMockedStatic = Mockito.mockStatic(CurrentDateTime.class);) {
+            localTimeMockedStatic.when(() -> CurrentDateTime.getCurrentTime()).thenReturn(lc);
+
+            perform(MockMvcRequestBuilders.post(REST_URL)
+                    .param("restaurantId", String.valueOf(RESTAURANT_TO_3_ID)))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                    .andExpect(VOTE_TO_MATCHER.contentJson(new VoteTo(RESTAURANT_TO_3_ID)));
+        }
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void UpdateAdminVoteAfterCheckTime() throws Exception {
+
+        LocalTime lc = LocalTime.of(13, 00, 00);
+
+        try (MockedStatic<CurrentDateTime> localTimeMockedStatic = Mockito.mockStatic(CurrentDateTime.class);) {
+            localTimeMockedStatic.when(() -> CurrentDateTime.getCurrentTime()).thenReturn(lc);
+
+            perform(MockMvcRequestBuilders.post(REST_URL)
+                    .param("restaurantId", String.valueOf(RESTAURANT_TO_3_ID)))
+                    .andExpect(status().isConflict())
+                    .andDo(print());
+        }
+    }
 }
