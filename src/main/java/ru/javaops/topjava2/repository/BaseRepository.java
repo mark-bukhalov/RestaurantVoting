@@ -28,4 +28,13 @@ public interface BaseRepository<T> extends JpaRepository<T, Integer> {
     default T getExisted(int id) {
         return findById(id).orElseThrow(() -> new NotFoundException("Entity with id=" + id + " not found"));
     }
+
+    @Transactional
+    default T getReferenceByIdExisted(int id) {
+        if (existsById(id)) {
+            return getReferenceById(id);
+        } else {
+            throw new NotFoundException("Entity with id=" + id + " not found");
+        }
+    }
 }

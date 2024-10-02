@@ -1,4 +1,4 @@
-package ru.javaops.topjava2.repository.projection;
+package ru.javaops.topjava2.repository.projection.restaurant;
 import java.math.BigDecimal;
 
 public interface RestaurantWithMenu {

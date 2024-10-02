@@ -1,7 +1,6 @@
 package ru.javaops.topjava2.model;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,10 +12,10 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "vote",
-        indexes = {@Index(name = "vote_unique_date_restaurantid_userid_idx", columnList = "date, user_id")})
+        indexes = {@Index(name = "vote_unique_date_userid_idx", columnList = "date, user_id", unique = true)})
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor()
 public class Vote extends BaseEntity {
 
     @Column(name = "date", nullable = false, columnDefinition = "DATE DEFAULT CURRENT_DATE")

@@ -1,6 +1,8 @@
 package ru.javaops.topjava2.repository.projection;
 
 import lombok.experimental.UtilityClass;
+import ru.javaops.topjava2.repository.projection.restaurant.RestaurantIdVoteCount;
+import ru.javaops.topjava2.repository.projection.restaurant.RestaurantWithMenu;
 import ru.javaops.topjava2.to.restaurant.UserViewRestaurantTo;
 
 import java.util.*;

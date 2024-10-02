@@ -4,8 +4,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javaops.topjava2.model.Restaurant;
-import ru.javaops.topjava2.repository.projection.RestaurantIdVoteCount;
-import ru.javaops.topjava2.repository.projection.RestaurantWithMenu;
+import ru.javaops.topjava2.repository.projection.restaurant.RestaurantIdVoteCount;
+import ru.javaops.topjava2.repository.projection.restaurant.RestaurantWithMenu;
 
 import java.time.LocalDate;
 import java.util.List;
