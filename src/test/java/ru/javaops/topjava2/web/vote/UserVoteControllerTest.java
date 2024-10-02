@@ -3,11 +3,9 @@ package ru.javaops.topjava2.web.vote;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.javaops.topjava2.repository.VoteRepository;
 import ru.javaops.topjava2.to.vote.VoteTo;
 import ru.javaops.topjava2.util.CurrentDateTime;
 import ru.javaops.topjava2.web.AbstractControllerTest;
@@ -25,9 +23,6 @@ import static ru.javaops.topjava2.web.vote.VoteTestData.USER_VOTE_TO;
 import static ru.javaops.topjava2.web.vote.VoteTestData.VOTE_TO_MATCHER;
 
 class UserVoteControllerTest extends AbstractControllerTest {
-
-    @Autowired
-    private VoteRepository voteRepository;
 
     @Test
     @WithUserDetails(value = USER_MAIL)
@@ -63,10 +58,10 @@ class UserVoteControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     void UpdateAdminVoteBeforeCheckTime() throws Exception {
 
-        LocalTime lc = LocalTime.of(11, 00, 00);
+        LocalTime lc = LocalTime.of(11, 0, 0);
 
-        try (MockedStatic<CurrentDateTime> localTimeMockedStatic = Mockito.mockStatic(CurrentDateTime.class);) {
-            localTimeMockedStatic.when(() -> CurrentDateTime.getCurrentTime()).thenReturn(lc);
+        try (MockedStatic<CurrentDateTime> localTimeMockedStatic = Mockito.mockStatic(CurrentDateTime.class)) {
+            localTimeMockedStatic.when(CurrentDateTime::getCurrentTime).thenReturn(lc);
 
             perform(MockMvcRequestBuilders.post(REST_URL)
                     .param("restaurantId", String.valueOf(RESTAURANT_TO_3_ID)))
@@ -81,10 +76,10 @@ class UserVoteControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     void UpdateAdminVoteAfterCheckTime() throws Exception {
 
-        LocalTime lc = LocalTime.of(13, 00, 00);
+        LocalTime lc = LocalTime.of(13, 0, 0);
 
-        try (MockedStatic<CurrentDateTime> localTimeMockedStatic = Mockito.mockStatic(CurrentDateTime.class);) {
-            localTimeMockedStatic.when(() -> CurrentDateTime.getCurrentTime()).thenReturn(lc);
+        try (MockedStatic<CurrentDateTime> localTimeMockedStatic = Mockito.mockStatic(CurrentDateTime.class)) {
+            localTimeMockedStatic.when(CurrentDateTime::getCurrentTime).thenReturn(lc);
 
             perform(MockMvcRequestBuilders.post(REST_URL)
                     .param("restaurantId", String.valueOf(RESTAURANT_TO_3_ID)))
