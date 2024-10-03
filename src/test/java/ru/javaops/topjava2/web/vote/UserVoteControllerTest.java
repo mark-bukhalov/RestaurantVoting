@@ -93,7 +93,8 @@ class UserVoteControllerTest extends AbstractControllerTest {
             localTimeMockedStatic.when(CurrentDateTime::getCurrentTime).thenReturn(lc);
 
             perform(MockMvcRequestBuilders.post(REST_URL)
-                    .param("restaurantId", String.valueOf(RESTAURANT_TO_3_ID)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(JsonUtil.writeValue(new VoteTo(RESTAURANT_TO_3_ID))))
                     .andExpect(status().isConflict())
                     .andDo(print());
         }
