@@ -1,7 +1,7 @@
 package ru.javaops.topjava2.web.vote;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,7 +26,7 @@ public class UserVoteController {
     @PostMapping()
     @ResponseStatus(HttpStatus.OK)
     public VoteTo createOrUpdate(@AuthenticationPrincipal AuthUser authUser,
-                                 @Param("restaurantId") Integer restaurantId) {
-        return service.createOrUpdate(authUser.getUser().getId(),restaurantId);
+                                 @RequestBody @Valid VoteTo voteTo) {
+        return service.createOrUpdate(authUser.getUser().getId(), voteTo.getRestaurantId());
     }
 }

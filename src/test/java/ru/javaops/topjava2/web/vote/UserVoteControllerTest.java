@@ -8,6 +8,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javaops.topjava2.to.vote.VoteTo;
 import ru.javaops.topjava2.util.CurrentDateTime;
+import ru.javaops.topjava2.util.JsonUtil;
 import ru.javaops.topjava2.web.AbstractControllerTest;
 
 import java.time.LocalTime;
@@ -15,8 +16,7 @@ import java.time.LocalTime;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.javaops.topjava2.web.restaurant.RestaurantTestData.RESTAURANT_TO_1_ID;
-import static ru.javaops.topjava2.web.restaurant.RestaurantTestData.RESTAURANT_TO_3_ID;
+import static ru.javaops.topjava2.web.restaurant.RestaurantTestData.*;
 import static ru.javaops.topjava2.web.user.UserTestData.*;
 import static ru.javaops.topjava2.web.vote.UserVoteController.REST_URL;
 import static ru.javaops.topjava2.web.vote.VoteTestData.USER_VOTE_TO;
@@ -43,14 +43,25 @@ class UserVoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = USER_MAIL)
+    @WithUserDetails(value = GUEST_MAIL)
     void CreateGuestVote() throws Exception {
         perform(MockMvcRequestBuilders.post(REST_URL)
-                .param("restaurantId", String.valueOf(RESTAURANT_TO_1_ID)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(new VoteTo(RESTAURANT_TO_1_ID))))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(VOTE_TO_MATCHER.contentJson(new VoteTo(RESTAURANT_TO_1_ID)));
+    }
+
+    @Test
+    @WithUserDetails(value = GUEST_MAIL)
+    void CreateGuestVoteUnprocessable() throws Exception {
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(new VoteTo(null))))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
     }
 
 
@@ -64,8 +75,8 @@ class UserVoteControllerTest extends AbstractControllerTest {
             localTimeMockedStatic.when(CurrentDateTime::getCurrentTime).thenReturn(lc);
 
             perform(MockMvcRequestBuilders.post(REST_URL)
-                    .param("restaurantId", String.valueOf(RESTAURANT_TO_3_ID)))
-                    .andExpect(status().isOk())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(JsonUtil.writeValue(new VoteTo(RESTAURANT_TO_3_ID))))
                     .andDo(print())
                     .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                     .andExpect(VOTE_TO_MATCHER.contentJson(new VoteTo(RESTAURANT_TO_3_ID)));
