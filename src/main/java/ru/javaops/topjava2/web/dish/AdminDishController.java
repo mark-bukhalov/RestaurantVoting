@@ -3,11 +3,13 @@ package ru.javaops.topjava2.web.dish;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.javaops.topjava2.model.Dish;
 import ru.javaops.topjava2.service.DishService;
 import ru.javaops.topjava2.to.dish.DishTo;
 
@@ -21,18 +23,21 @@ import java.util.List;
 public class AdminDishController {
     public static final String REST_URL = "/api/admin/dish";
 
+    private final Converter<Dish, DishTo> dishToConverter;
+    private final Converter<List<Dish>, List<DishTo>> dishListToConverter;
+
     private final DishService service;
 
     @GetMapping
     public List<DishTo> getAll() {
         log.info("getAll");
-        return service.getAll();
+        return dishListToConverter.convert(service.getAll());
     }
 
     @GetMapping("/{id}")
     public DishTo get(@PathVariable Integer id) {
         log.info("get {}", id);
-        return service.get(id);
+        return dishToConverter.convert(service.get(id));
     }
 
     @DeleteMapping("/{id}")
@@ -45,7 +50,7 @@ public class AdminDishController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DishTo> createWithLocation(@Valid @RequestBody DishTo dishTo) {
         log.info("create {}", dishTo);
-        DishTo created = service.create(dishTo);
+        DishTo created = dishToConverter.convert(service.create(dishTo));
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId())

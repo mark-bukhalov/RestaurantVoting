@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javaops.topjava2.model.Restaurant;
 import ru.javaops.topjava2.repository.RestaurantRepository;
 import ru.javaops.topjava2.repository.projection.ProjectionConverter;
-import ru.javaops.topjava2.to.restaurant.CreateRestaurantTo;
 import ru.javaops.topjava2.to.restaurant.RestaurantTo;
 import ru.javaops.topjava2.to.restaurant.UserViewRestaurantTo;
 import ru.javaops.topjava2.util.validation.ValidationUtil;
@@ -19,30 +18,29 @@ import java.util.List;
 public class RestaurantService {
     private final RestaurantRepository repository;
 
-    public List<RestaurantTo> getAll() {
-        return RestaurantTo.fromListModel(repository.findAll());
+    public List<Restaurant> getAll() {
+        return repository.findAll();
     }
 
-    public RestaurantTo get(Integer id) {
-        return RestaurantTo.fromModel(repository.getExisted(id));
+    public Restaurant get(Integer id) {
+        return repository.getExisted(id);
     }
 
     public void delete(Integer id) {
         repository.deleteExisted(id);
     }
 
-    public RestaurantTo create(CreateRestaurantTo createRestaurantTo) {
-        Restaurant restaurant = CreateRestaurantTo.createFromTo(createRestaurantTo);
+    public Restaurant create(RestaurantTo createRestaurantTo) {
+        Restaurant restaurant = createFromTo(createRestaurantTo);
         ValidationUtil.checkNew(restaurant);
-        Restaurant created = repository.save(restaurant);
-        return RestaurantTo.fromModel(created);
+        return repository.save(restaurant);
     }
 
     @Transactional
-    public void update(CreateRestaurantTo createRestaurantTo, Integer id) {
+    public void update(RestaurantTo createRestaurantTo, Integer id) {
         ValidationUtil.assureIdConsistent(createRestaurantTo, id);
         Restaurant restaurant = repository.getExisted(id);
-        repository.save(CreateRestaurantTo.updateFromTo(restaurant, createRestaurantTo));
+        repository.save(updateFromTo(restaurant, createRestaurantTo));
     }
 
     @Transactional
@@ -50,5 +48,14 @@ public class RestaurantService {
         return ProjectionConverter.mergeRestaurantWithMenuAndVote(
                 repository.findAllWithMenuOnDate(LocalDate.now()),
                 repository.countRestaurantVoteOnDate(LocalDate.now()));
+    }
+
+    public static Restaurant createFromTo(RestaurantTo to) {
+        return new Restaurant(to.getId(), to.getName());
+    }
+
+    public static Restaurant updateFromTo(Restaurant restaurant, RestaurantTo restaurantTo) {
+        restaurant.setName(restaurantTo.getName());
+        return restaurant;
     }
 }

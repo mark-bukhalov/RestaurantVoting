@@ -18,23 +18,23 @@ public class DishService {
     private final DishRepository dishRepository;
     private final RestaurantRepository restaurantRepository;
 
-    public List<DishTo> getAll() {
-        return DishTo.fromListModel(dishRepository.findAll());
+    public List<Dish> getAll() {
+        return dishRepository.findAll();
     }
 
-    public DishTo get(Integer id) {
-        return DishTo.fromModel(dishRepository.getExisted(id));
+    public Dish get(Integer id) {
+        return dishRepository.getExisted(id);
     }
 
     public void delete(Integer id) {
         dishRepository.deleteExisted(id);
     }
 
-    public DishTo create(DishTo dishTo) {
+    public Dish create(DishTo dishTo) {
         Dish dish = modelFromTo(dishTo);
         ValidationUtil.checkNew(dishTo);
         dishRepository.save(dish);
-        return DishTo.fromModel(dish);
+        return dish;
     }
 
     public void update(DishTo dishTo, Integer id) {

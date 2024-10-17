@@ -2,10 +2,12 @@ package ru.javaops.topjava2.web.dish;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.javaops.topjava2.model.Dish;
 import ru.javaops.topjava2.repository.DishRepository;
 import ru.javaops.topjava2.service.DishService;
 import ru.javaops.topjava2.to.dish.DishTo;
@@ -33,6 +35,9 @@ class AdminDishControllerTest extends AbstractControllerTest {
 
     @Autowired
     DishService dishService;
+
+    @Autowired
+    Converter<Dish, DishTo> dishToConverter;
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
@@ -99,7 +104,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
         DishTo expectedDish = new DishTo(9, newDish.getName(), newDish.getPrice(), newDish.getDate(), newDish.getRestaurantId());
 
         DISH_TO_MATCHER.assertMatch(createdDish, expectedDish);
-        DISH_TO_MATCHER.assertMatch(dishService.get(9), expectedDish);
+        DISH_TO_MATCHER.assertMatch(dishToConverter.convert(dishService.get(9)), expectedDish);
     }
 
     @Test
@@ -124,7 +129,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
 
         DishTo expectedDish = new DishTo(updateDish.getId(), updateDish.getName(), updateDish.getPrice(), updateDish.getDate(), updateDish.getRestaurantId());
 
-        DISH_TO_MATCHER.assertMatch(dishService.get(updateDish.getId()), expectedDish);
+        DISH_TO_MATCHER.assertMatch(dishToConverter.convert(dishService.get(updateDish.getId())), expectedDish);
     }
 
     @Test
