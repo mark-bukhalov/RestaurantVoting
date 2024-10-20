@@ -34,6 +34,7 @@ public class DishService {
 
     @Caching(evict = {
             @CacheEvict(value = "dish_all", allEntries = true),
+            @CacheEvict(value = "restaurant_menu", allEntries = true),
             @CacheEvict(value = "dish_id")
     })
     public void delete(Integer id) {
@@ -41,8 +42,13 @@ public class DishService {
     }
 
     @Caching(
-            put = {@CachePut(value = "dish_id", key = "#result.id")},
-            evict = {@CacheEvict(value = "dish_all", allEntries = true)})
+            put = {
+                    @CachePut(value = "dish_id", key = "#result.id")
+            },
+            evict = {
+                    @CacheEvict(value = "dish_all", allEntries = true),
+                    @CacheEvict(value = "restaurant_menu", allEntries = true)
+            })
     public Dish create(DishTo dishTo) {
         Dish dish = modelFromTo(dishTo);
         ValidationUtil.checkNew(dishTo);
@@ -51,8 +57,11 @@ public class DishService {
     }
 
     @Caching(
-            evict = {@CacheEvict(value = "dish_all", allEntries = true),
-                    @CacheEvict(value = "dish_id", key = "#id")})
+            evict = {
+                    @CacheEvict(value = "dish_all", allEntries = true),
+                    @CacheEvict(value = "restaurant_menu", allEntries = true),
+                    @CacheEvict(value = "dish_id", key = "#id")
+            })
     public void update(DishTo dishTo, Integer id) {
         ValidationUtil.assureIdConsistent(dishTo, id);
         Dish dish = dishRepository.getExisted(id);

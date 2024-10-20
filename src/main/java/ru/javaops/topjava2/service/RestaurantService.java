@@ -34,6 +34,7 @@ public class RestaurantService {
 
     @Caching(evict = {
             @CacheEvict(value = "restaurant_all", allEntries = true),
+            @CacheEvict(value = "restaurant_menu", allEntries = true),
             @CacheEvict(value = "restaurant_id")
     })
     public void delete(Integer id) {
@@ -41,8 +42,13 @@ public class RestaurantService {
     }
 
     @Caching(
-            put = {@CachePut(value = "restaurant_id", key = "#result.id")},
-            evict = {@CacheEvict(value = "restaurant_all", allEntries = true)})
+            put = {
+                    @CachePut(value = "restaurant_id", key = "#result.id")
+            },
+            evict = {
+                    @CacheEvict(value = "restaurant_menu", allEntries = true),
+                    @CacheEvict(value = "restaurant_all", allEntries = true)
+            })
     public Restaurant create(RestaurantTo createRestaurantTo) {
         Restaurant restaurant = createFromTo(createRestaurantTo);
         ValidationUtil.checkNew(restaurant);
@@ -51,6 +57,7 @@ public class RestaurantService {
 
     @Caching(
             evict = {@CacheEvict(value = "restaurant_all", allEntries = true),
+                    @CacheEvict(value = "restaurant_menu", allEntries = true),
                     @CacheEvict(value = "restaurant_id", key = "#id")})
     @Transactional
     public void update(RestaurantTo createRestaurantTo, Integer id) {

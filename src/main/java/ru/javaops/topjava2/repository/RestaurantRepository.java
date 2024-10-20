@@ -1,5 +1,6 @@
 package ru.javaops.topjava2.repository;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Transactional(readOnly = true)
 public interface RestaurantRepository extends BaseRepository<Restaurant> {
+    @Cacheable("restaurant_menu")
     @Query("""
                 SELECT r.id as id, r.name as name, m as dish
                   FROM Restaurant AS r
