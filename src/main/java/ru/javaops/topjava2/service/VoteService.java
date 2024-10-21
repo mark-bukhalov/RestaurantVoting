@@ -25,7 +25,7 @@ public class VoteService {
     private final UserRepository userRepository;
 
     public VoteTo getUserVoteCurrentDay(Integer userId) {
-        VoteRestaurantId voteRestaurantId = voteRepository.findByUserIdAndDate(userId, LocalDate.now(), VoteRestaurantId.class)
+        VoteRestaurantId voteRestaurantId = voteRepository.findByDateAndUserId(LocalDate.now(), userId, VoteRestaurantId.class)
                 .orElseThrow(() -> new NotFoundException("Not found"));
 
         return new VoteTo(voteRestaurantId.getRestaurantId());
@@ -34,7 +34,7 @@ public class VoteService {
     @Transactional
     public VoteTo createOrUpdate(Integer userId, Integer restaurantId) {
         LocalDate currentDate = LocalDate.now();
-        Vote vote = voteRepository.findByUserIdAndDate(userId, currentDate, Vote.class).orElseGet(Vote::new);
+        Vote vote = voteRepository.findByDateAndUserId(currentDate, userId, Vote.class).orElseGet(Vote::new);
         if (vote.isNew()) {
             vote.setDate(currentDate);
             vote.setUser(userRepository.getReferenceByIdExisted(userId));

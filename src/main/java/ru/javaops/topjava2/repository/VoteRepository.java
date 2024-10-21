@@ -7,5 +7,5 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public interface VoteRepository extends BaseRepository<Vote>{
-    <T> Optional<T> findByUserIdAndDate(Integer userID, LocalDate onDate,Class<T> type);
+    <T> Optional<T> findByDateAndUserId(LocalDate onDate, Integer userID, Class<T> type);
 }
